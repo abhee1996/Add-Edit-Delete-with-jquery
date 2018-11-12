@@ -1,0 +1,49 @@
+    $("#City_Submit_Form").validate({
+        rules: {
+            txtCityName: {
+                required: true,
+                lettersonly: true
+            }
+        },
+        messages: {
+            txtCityName: {
+                required: "This is required"
+            }
+        },
+        submitHandler: function (form) {
+             debugger;
+            var ot = {
+                Cityname : $("#txtCityName").val()
+            }; //new City();
+         
+            $("#CreateCityLoading").show();
+            $("#CreateCity_btn_cancel").hide();
+            $("#CreateCity_btn_save").hide();
+            $.ajax({
+                url: "/City/Create",
+                type: "post",
+                datatype: "json",
+                data: ot,
+                success: function (response) {
+                    // debugger;
+                    if (response == true) {
+                        toastr.success("City is Created", "Success",
+                        toastr.options = { "positionClass": "toast-bottom-full-width" });
+                        location.reload();
+                    }
+                    else {
+                        toastr.error(response);
+                        $("#CreateCity_btn_cancel").show();
+                        $("#CreateCityLoading").hide();
+                    }
+                },
+                error: function (response) {
+
+                    $("#CreateCityLoading").hide();
+                    $("#CreateCity_btn_cancel").show();
+                    $("#CreateCity_btn_save").show();
+                }
+
+            });
+        },
+    });

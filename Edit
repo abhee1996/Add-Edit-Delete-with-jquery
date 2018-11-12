@@ -1,0 +1,47 @@
+    $("#City_Edit_Form").validate({
+        rules: {
+            txtECityName: {
+                required: true,
+                lettersonly: true
+            }
+        },
+        messages: {
+            txtECityName: {
+                required: "This is required"
+            },
+        },
+        submitHandler: function (form) {
+            debugger;
+            var eot = {
+                Cityname : $("#txtECityName").val(),
+                Id : $("#ECityId").val()
+            }; //new City();
+           
+            $("#EditCityLoading").show();
+            $("#EditCity_btn_save").hide();
+            $("#EditCity_btn_cancel").hide();
+            $.ajax({
+                url: "/City/Edit",
+                type: "post",
+                datatype: "json",
+                data: { cc: eot },
+                success: function (response) {
+                    if (response == true) {
+                        toastr.success("City is updated successfully");
+                        location.reload();
+                    }
+                    else {
+                        toastr.error(response);
+                        $("#EditCity_btn_cancel").show();
+                    }
+                    
+                },
+                error: function (response) {
+
+                    $("#EditCityLoading").hide();
+                    $("#EditCity_btn_save").show();
+                    $("#EditCity_btn_cancel").show();
+                }
+            });
+        },
+    });

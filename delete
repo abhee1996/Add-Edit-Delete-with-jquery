@@ -1,0 +1,43 @@
+    $("#City_Delete_Form").validate({
+        rules: {
+
+        },
+
+        messages: {
+
+        },
+
+        submitHandler: function (form) {
+            // debugger;
+            var Id = $("#DCityId").val();
+
+            $("#DeleteCityLoading").show();
+            $("#DeleteCity_btn_cancel").hide();
+            $("#DeleteCity_btn_save").hide();
+            $.ajax({
+                url: "/City/Delete",
+                type: "post",
+                datatype: "json",
+                data: { id: Id },
+                success: function (response) {
+                    if (response==true) {
+                        toastr.success("City is Deleted successfully");
+                        location.reload();
+                    }
+                    else {
+                        toastr.error(response);
+                        $("#DeleteCity_btn_cancel").show();
+                    }
+                    
+                },
+                error: function (response) {
+
+                    $("#DeleteCityLoading").hide();
+                    $("#DeleteCity_btn_cancel").show();
+                    $("#DeleteCity_btn_save").show();
+                }
+
+            });
+        },
+
+    });

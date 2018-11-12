@@ -1,0 +1,59 @@
+
+function CityTypeDelete(id) {
+    debugger;
+    if (id > 0)
+        $.ajax({
+            url: "/City/Delete/" + id,
+            type: "get",
+            datatype: "json",
+            data: { id: id },
+            success: function (response) {
+                if (response != null) {
+                    // debugger;
+                    $("#txtDCityName").text(response.cityname);
+                    $("#DCityId").val(response.id);
+                    $("#DeleteCity").modal("show");
+
+                }
+            },
+            error: function (response) {
+
+                $("#DeleteCityLoading").hide();
+                $("#DeleteCity_btn_cancel").show();
+                $("#DeleteCity_btn_save").show();
+            }
+
+        });
+    else
+        toastr.error("Something went wrong");
+}
+function CityTypeEdit(id) {
+    debugger;
+    if (id > 0)
+
+        $.ajax({
+            url: "/City/Edit/" + id,
+            type: "get",
+            datatype: "json",
+            data: { id: id },
+
+            success: function (response) {
+                // debugger;
+                if (response != null) {
+                    $("#txtECityName").val(response.cityname);
+                    $("#ECityId").val(response.id);
+                    $("#EditCity").modal("show");
+
+                }
+            },
+            error: function (response) {
+
+                $("#EditCityLoading").hide();
+                $("#EditCity_btn_save").show();
+                $("#EditCity_btn_cancel").show();
+            }
+
+        });
+    else
+        toastr.error("Something went wrong");
+}

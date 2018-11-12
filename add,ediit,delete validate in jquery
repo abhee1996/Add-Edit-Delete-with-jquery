@@ -1,0 +1,167 @@
+$(function () {
+    $("#City_Submit_Form").validate({
+        rules: {
+            txtCityName: {
+                required: true,
+                lettersonly: true
+            }
+        },
+        messages: {
+            txtCityName: {
+                required: "This is required"
+            }
+        },
+        submitHandler: function (form) {
+             debugger;
+            var ot = {
+                Cityname : $("#txtCityName").val()
+            }; //new City();
+         
+            $("#CreateCityLoading").show();
+            $("#CreateCity_btn_cancel").hide();
+            $("#CreateCity_btn_save").hide();
+            $.ajax({
+                url: "/City/Create",
+                type: "post",
+                datatype: "json",
+                data: ot,
+                success: function (response) {
+                    // debugger;
+                    if (response == true) {
+                        toastr.success("City is Created", "Success",
+                        toastr.options = { "positionClass": "toast-bottom-full-width" });
+                        location.reload();
+                    }
+                    else {
+                        toastr.error(response);
+                        $("#CreateCity_btn_cancel").show();
+                        $("#CreateCityLoading").hide();
+                    }
+                },
+                error: function (response) {
+
+                    $("#CreateCityLoading").hide();
+                    $("#CreateCity_btn_cancel").show();
+                    $("#CreateCity_btn_save").show();
+                }
+
+            });
+        },
+    });
+    $("#City_Edit_Form").validate({
+        rules: {
+            txtECityName: {
+                required: true,
+                lettersonly: true
+            }
+        },
+        messages: {
+            txtECityName: {
+                required: "This is required"
+            },
+        },
+        submitHandler: function (form) {
+            debugger;
+            var eot = {
+                Cityname : $("#txtECityName").val(),
+                Id : $("#ECityId").val()
+            }; //new City();
+           
+            $("#EditCityLoading").show();
+            $("#EditCity_btn_save").hide();
+            $("#EditCity_btn_cancel").hide();
+            $.ajax({
+                url: "/City/Edit",
+                type: "post",
+                datatype: "json",
+                data: { cc: eot },
+                success: function (response) {
+                    if (response == true) {
+                        toastr.success("City is updated successfully");
+                        location.reload();
+                    }
+                    else {
+                        toastr.error(response);
+                        $("#EditCity_btn_cancel").show();
+                    }
+                    
+                },
+                error: function (response) {
+
+                    $("#EditCityLoading").hide();
+                    $("#EditCity_btn_save").show();
+                    $("#EditCity_btn_cancel").show();
+                }
+            });
+        },
+    });
+    $("#City_Delete_Form").validate({
+        rules: {
+
+        },
+
+        messages: {
+
+        },
+
+        submitHandler: function (form) {
+            // debugger;
+            var Id = $("#DCityId").val();
+
+            $("#DeleteCityLoading").show();
+            $("#DeleteCity_btn_cancel").hide();
+            $("#DeleteCity_btn_save").hide();
+            $.ajax({
+                url: "/City/Delete",
+                type: "post",
+                datatype: "json",
+                data: { id: Id },
+                success: function (response) {
+                    if (response==true) {
+                        toastr.success("City is Deleted successfully");
+                        location.reload();
+                    }
+                    else {
+                        toastr.error(response);
+                        $("#DeleteCity_btn_cancel").show();
+                    }
+                    
+                },
+                error: function (response) {
+
+                    $("#DeleteCityLoading").hide();
+                    $("#DeleteCity_btn_cancel").show();
+                    $("#DeleteCity_btn_save").show();
+                }
+
+            });
+        },
+
+    });
+
+    $.validator.addMethod("OfficeAddress", function (value) {
+        return (/^$|\w+(\s\w+){2,}/).test(value) // consists of only these chars
+    }, "Only alphanumeric characters are allowed");
+    $.validator.addMethod("PhoneNumber", function (value) {
+        return /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/.test(value)
+    }, "The Vlaue Use by Phone Only");
+    jQuery.validator.addMethod("lettersonly", function (value, element) {
+        return this.optional(element) || /^[A-Za-z ]+$/i.test(value);
+    }, "Enter only alphabetical characters");
+    jQuery.validator.addMethod("numberonly", function (value, element) {
+        return this.optional(element) || /^[0-9]+$/i.test(value);
+    }, "Number Only");
+    jQuery.validator.addMethod("letternumberonly", function (value, element) {
+        return this.optional(element) || /^[a-zA-Z0-9 ]+$/i.test(value);
+    }, "Number and Alphabets Only");
+    jQuery.validator.addMethod("decimalonly", function (value, element) {
+        return this.optional(element) || /^[0-9.]+$/i.test(value);
+    }, "Decimal Only");
+    jQuery.validator.addMethod("gradeonly", function (value, element) {
+        return this.optional(element) || /^[A-Za-z+- ]+$/i.test(value);
+    }, "Grade Only");
+    $.validator.addMethod("CNICField", function (value) {
+        return /^$|^[0-9+]{5}-[0-9+]{7}-[0-9]{1}$/.test(value) // consists of only these chars
+    }, "The CNIC is not in Valid Format. It must be like '11111-1111111-1'");
+
+});
